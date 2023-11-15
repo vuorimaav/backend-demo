@@ -1,0 +1,6 @@
+.envrc
+build/
+.idea/
+*.iml
+.gradle/
+/out/
