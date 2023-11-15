@@ -21,5 +21,8 @@
       purposes.
 * Start the application by typing `./gradlew bootRun`
 
+### Open browser
+
 The back end will be available at http://localhost:8080
+Swagger UI will be available at http://localhost:8080/swagger-ui.html
 
