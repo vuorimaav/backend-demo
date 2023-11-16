@@ -6,6 +6,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.8.22'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.8.22'
     id 'org.flywaydb.flyway' version '9.22.3'
+    id 'nu.studer.jooq' version '8.2.1'
 }
 
 group = 'com.vvv'
@@ -31,15 +32,56 @@ flyway {
 }
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.5'
     implementation 'org.flywaydb:flyway-core:9.22.3'
     implementation 'org.flywaydb:flyway-database-postgresql:10.0.0'
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.8.22'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'org.jooq:jooq:3.18.7'
+    implementation 'org.jooq:jooq-meta:3.18.7'
+    implementation 'org.jooq:jooq-codegen:3.18.7'
+    jooqGenerator 'org.postgresql:postgresql:42.6.0'
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'org.flywaydb:flyway-gradle-plugin:10.0.0'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+jooq {
+    version = '3.18.7'
+
+    configurations {
+        main {
+            generateSchemaSourceOnCompilation = false
+            generationTool {
+                jdbc {
+                    url = 'jdbc:postgresql://localhost:5432/postgres'
+                    user = 'postgres'
+                    password = System.getenv('DB_PASSWD')
+                }
+                generator {
+                    name = 'org.jooq.codegen.KotlinGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        inputSchema = 'public'
+                    }
+                    generate {
+                        deprecated = false
+                        kotlinSetterJvmNameAnnotationsOnIsPrefix = true
+                        pojosAsKotlinDataClasses = true
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = 'com.vvv.vvdemo.models'
+                        directory = 'src/main/kotlin/generated/'
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
 }
 
 tasks.withType(KotlinCompile) {
