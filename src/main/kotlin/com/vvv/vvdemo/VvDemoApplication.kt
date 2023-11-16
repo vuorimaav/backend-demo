@@ -9,5 +9,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 class VvDemoApplication
 
 fun main(args: Array<String>) {
-	runApplication<VvDemoApplication>(*args)
+    runApplication<VvDemoApplication>(*args)
 }
