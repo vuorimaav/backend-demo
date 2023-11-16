@@ -20,7 +20,10 @@ class BookController {
     @GetMapping("/get-book/{isbn}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getBook(@PathVariable isbn: String?): ResponseEntity<BookService.BookDto> {
         if (isbn.isNullOrEmpty()) return ResponseEntity(HttpStatus.BAD_REQUEST)
-        return ResponseEntity(bookService.getBookByIsbn(isbn), HttpStatus.OK)
+        val result = bookService.getBookByIsbn(isbn)
+        if (result.isPresent)
+            return ResponseEntity(result.get(), HttpStatus.OK)
+        else return ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
 }
