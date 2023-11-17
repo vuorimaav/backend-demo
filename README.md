@@ -17,8 +17,6 @@
 ### Start the app
 
 * Start the Postgres database by typing `docker-compose up -d`
-    * There's a default password inside the `docker-compose.yml` file and hence is only intended for local development
-      purposes.
 * Start the application by typing `./gradlew bootRun`
 
 ### Open browser
